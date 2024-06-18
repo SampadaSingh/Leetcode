@@ -4,26 +4,27 @@ public:
         int n = difficulty.size();
         int m = worker.size();
 
-        priority_queue<pair<int, int>> pq; // max heap
-        for (int i = 0; i <n; i++) {
-            int diff = difficulty[i];
-            int prof = profit[i];
+        vector<pair<int, int>> job;
 
-            pq.push({prof, diff});
+        for (int i = 0; i < n; i++) {
+            job.push_back({difficulty[i], profit[i]});
         }
 
-        sort(begin(worker), end(worker), greater<int>());//descending order
+        sort(worker.begin(), worker.end());
+        sort(job.begin(), job.end());
 
-        int i = 0;
+        int index = 0;
         int maxProfit = 0;
-        while (i < m && !pq.empty()) {
-            if (pq.top().second > worker[i]) {
-                pq.pop();
-            } else {
-                maxProfit += pq.top().first;
-                i++;
+        int res = 0;
+        
+        for (int i = 0; i < m; i++) {
+            while (index <n && worker[i] >= job[index].first) {
+                maxProfit = max(maxProfit, job[index].second);
+                index++;
             }
+            res += maxProfit;
         }
-        return maxProfit;
+
+        return res;
     }
 };
